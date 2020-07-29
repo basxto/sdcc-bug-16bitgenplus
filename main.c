@@ -9,6 +9,7 @@ UINT8 smart_write(const UINT8 y, const UINT8 height, char *str){
     UINT8 run = 1;
     UINT8 tmp_y = y;
     UINT8 jump_back = 0;
+    UINT8 ret = 0;
     // string pointer
     char *str_ptr = str;
     while(run){
@@ -32,11 +33,12 @@ UINT8 smart_write(const UINT8 y, const UINT8 height, char *str){
         }
         if(tmp_y >= y+height){
             tmp_y = y;
+            ++ret;
         }
     }
-    return 0;
+    return ret;
 }
 
 void main(){
-    smart_write(0, 20, "test");
+    (smart_write(1, 20, "test\n") == 0);
 }
