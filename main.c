@@ -1,19 +1,14 @@
-#include <stdio.h>
-
 #define UINT8           unsigned char
 #define specialchar_nl  '\n'
 
 #define buffer_length (16)
 UINT8 buffer[buffer_length];
-const unsigned char text[] = "not a real dictionary!";
 
 UINT8 smart_write(const UINT8 y, const UINT8 height, char *str){
     UINT8 length;
     UINT8 run = 1;
     UINT8 tmp_y = y;
     UINT8 jump_back = 0;
-    // string return pointer
-    char *str_ret = 0;
     // string pointer
     char *str_ptr = str;
     while(run){
@@ -26,10 +21,6 @@ UINT8 smart_write(const UINT8 y, const UINT8 height, char *str){
             ++str_ptr;
             if(jump_back != 0){
                 --jump_back;
-                if(jump_back == 0){
-                    str_ptr=str_ret;
-                    str_ret = 0;
-                }
             }
         }
         if(*str_ptr == '\0'){
