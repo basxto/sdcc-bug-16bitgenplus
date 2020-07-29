@@ -55,31 +55,11 @@ UINT8 smart_write(const UINT8 x, const UINT8 y, const UINT8 width, const UINT8 h
     char *str_ptr = str;
     space_area(x, y, width, height);
     while(run){
-        // detect choices
-        if(start == 0 && *str_ptr == specialchar_2){
-            if(choices++ == 0)
-                firstchoice = tmp_y;
-            buffer[buffer_length - 1] = specialchar_1;
-            write_line(x + start, tmp_y, 1, buffer + (buffer_length - 1));
-            start += 1;
-            str_ptr += 1;
-        }
         // regular stuff
         max = 16;
         if(width < start+max)
             max = width-start;
         for(length = 0; length < max; ++length){
-            // detect jump command
-            if((*str_ptr & 0x80) != 0){
-                if(str_ret == 0){
-                    // set it to next char
-                    str_ret = str_ptr+1;
-                }
-                UINT8 offset = (*str_ptr & 0x7F)*2;
-                // jump to dictionary entry
-                str_ptr = text + offset;
-                jump_back = 2;
-            }
             //get to that next round
             //end of this line
             if(*str_ptr == specialchar_nl || *str_ptr == '\0'){
@@ -111,48 +91,9 @@ UINT8 smart_write(const UINT8 x, const UINT8 y, const UINT8 width, const UINT8 h
             tmp_y += 1;
         }
         if(tmp_y >= y+height){
-            // if it reached the width, we overwite the last letter
-            if(*(str_ptr-1) != specialchar_nl){
-                --str_ptr;
-            }
-            buffer[0] = specialchar_3;
-            buffer[buffer_length - 1] = specialchar_3;
-            write_line(x + width - 1, y + height - 1, 1, buffer + (buffer_length - 1));
-            delay(100);
-            waitpad_any(J_A);
-            delay(100);
             tmp_y = y;
-            space_area(x, y, width, height);
         }
 
-    }
-    // let user select
-    if(choices != 0){
-        tmp_y = firstchoice;
-        run = 1;
-        //write arrow
-        buffer[buffer_length - 1] = specialchar_2;
-        write_line(x, tmp_y, 1, buffer + (buffer_length - 1));
-        while(run){
-            delay(100);
-            buffer[buffer_length - 1] = specialchar_1;
-            write_line(x, tmp_y, 1, buffer + (buffer_length - 1));
-            switch(joypad()){
-                case J_UP:
-                    if(tmp_y > firstchoice)
-                        --tmp_y;
-                    break;
-                case J_DOWN:
-                    if(tmp_y < firstchoice + choices - 1)
-                        ++tmp_y;
-                    break;
-                case J_A:
-                    return (tmp_y - firstchoice) + 1;
-                    break;
-            }
-            buffer[buffer_length - 1] = specialchar_2;
-            write_line(x, tmp_y, 1, buffer + (buffer_length - 1));
-        }
     }
     return 0;
 }
