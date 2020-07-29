@@ -8,37 +8,10 @@
 #define	J_DOWN          0x08U
 #define	J_UP            0x04U
 #define specialchar_nl  '\n'
-#define specialchar_1   ' '
-#define specialchar_2   '>'
-#define specialchar_3   'v'
 
 #define buffer_length (16)
 UINT8 buffer[buffer_length];
 const unsigned char text[] = "not a real dictionary!";
-
-void delay(UINT16 d) NONBANKED {
-    return;
-}
-
-UINT8 waitpad(UINT8 mask) NONBANKED {
-    return 0;
-}
-
-UINT8 joypad(void) NONBANKED{
-    return 0;
-}
-
-void waitpad_any(UINT8 mask){
-    return;
-}
-
-void space_area(const UINT8 x, const UINT8 y, const UINT8 width, const UINT8 height){
-    return;
-}
-
-void write_line(UINT8 x, UINT8 y, UINT8 length, char *str) {
-    return;
-}
 
 UINT8 smart_write(const UINT8 x, const UINT8 y, const UINT8 width, const UINT8 height, char *str){
     UINT8 start = 0;
@@ -53,7 +26,6 @@ UINT8 smart_write(const UINT8 x, const UINT8 y, const UINT8 width, const UINT8 h
     char *str_ret = 0;
     // string pointer
     char *str_ptr = str;
-    space_area(x, y, width, height);
     while(run){
         // regular stuff
         max = 16;
@@ -79,7 +51,6 @@ UINT8 smart_write(const UINT8 x, const UINT8 y, const UINT8 width, const UINT8 h
             }
         }
 
-        write_line(x + start, tmp_y, length, buffer);
         start += length;
 
         if(*str_ptr == '\0'){
@@ -93,7 +64,6 @@ UINT8 smart_write(const UINT8 x, const UINT8 y, const UINT8 width, const UINT8 h
         if(tmp_y >= y+height){
             tmp_y = y;
         }
-
     }
     return 0;
 }
